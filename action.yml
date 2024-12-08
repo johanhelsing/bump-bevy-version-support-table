@@ -1,0 +1,24 @@
+name: "Bump bevy version support table"
+description: "Bump Bevy version support table in README.md and commit changes. Assumes repo is checked out. Does not push"
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install toml
+    - name: Bump version support table
+      shell: bash
+      run: |
+        python bump_version_support_table.py
+    - name: Commit changes
+      shell: bash
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        if ! git diff --cached --exit-code; then
+          git commit -m "chore: Bump bevy version support table"
+          git push
+        fi
