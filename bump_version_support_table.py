@@ -68,13 +68,16 @@ def update_version_support_table(
     
     bevy_ver, plugin_ver = new_versions
     # add main for current plugin version
-    versions[bevy_ver] = versions[bevy_ver] + [plugin_ver, "main"]
+    versions[bevy_ver] = versions.get(bevy_ver, []) + [plugin_ver, "main"]
+
+    # sorted versions by key
+    versions = sorted(versions.items(), key=lambda x: x[0], reverse=True)
 
     print (versions)
 
     rows = ""
     # create new table rows
-    for bevy_version, plugin_versions in versions.items():
+    for bevy_version, plugin_versions in versions:
         plugin_versions = ", ".join(plugin_versions)
         rows += f"|{bevy_version}|{plugin_versions}|\n"
 
